@@ -1,20 +1,22 @@
 // src/questions.ts
 
-export const questions = [
+export interface QuestionItem {
+  category: string;
+  question: string;
+  answer: string;
+  example?: string;          // The '?' means this field is optional
+  crossQuestions?: string[]; // Optional array of follow-up questions
+}
+
+// 2. Explicitly bind the type to the exported array
+export const questions: QuestionItem[] = [
   {
     category: "AWS",
-    question: "What is AWS?",
-    answer: "Amazon Web Services (AWS) is a comprehensive, evolving cloud computing platform provided by Amazon...",
-    example: "Using AWS EC2 to spin up virtual servers or S3 for storing static assets.",
-    crossQuestions: ["What are the core benefits of cloud computing?", "What is the difference between IaaS and PaaS?"]
+    question: "What is the difference between a Security Group and a NACL?",
+    answer: "Security Groups are stateful and operate at the instance level, whereas NACLs are stateless and operate at the subnet level.",
+    example: "Security Groups allow web traffic; NACLs block specific IP subnets.",
+    crossQuestions: ["Which layer of the OSI model do they operate on?"]
   },
-
-{
- category:"AWS",
- question:"What is AWS?",
- answer:"AWS is Amazon's cloud platform that provides compute, storage, networking and managed services.",
- example:"Instead of buying physical servers, companies launch EC2 instances in AWS."
-},
 
 {
  category:"AWS",
