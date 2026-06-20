@@ -20,8 +20,8 @@ interface QuestionItem {
   category: string;
   question: string;
   answer: string;
-  example?: string;          // <-- Added '?' to make it safe if missing
-  crossQuestions?: string[]; // <-- Added '?' to make it safe if missing
+  example?: string;
+  crossQuestions?: string[];
 }
 
 export default function App() {
@@ -66,10 +66,12 @@ export default function App() {
     }
   };
 
-  const filteredQuestions = questions.filter((q: any) => { // Using 'any' here bypasses strict array mismatch rules
+  // Cast the raw array directly to your QuestionItem[] type using "as QuestionItem[]"
+  const filteredQuestions = (questions as QuestionItem[]).filter((q) => {
     const matchesCategory = activeCategory === 'All' || q.category === activeCategory;
-    const matchesSearch = (q.question?.toLowerCase() || '').includes(searchQuery.toLowerCase()) || 
-                          (q.answer?.toLowerCase() || '').includes(searchQuery.toLowerCase());
+    const matchesSearch = 
+      (q.question?.toLowerCase() || '').includes(searchQuery.toLowerCase()) || 
+      (q.answer?.toLowerCase() || '').includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -83,7 +85,7 @@ export default function App() {
 
   const startInterviewMode = () => {
     const shuffled = [...questions].sort(() => 0.5 - Math.random());
-    setMockQuestions(shuffled.slice(10)); // Selects exactly 10 random items
+    setMockQuestions(shuffled.slice(0, 10) as any); // Safely cast and correctly subset array
     setCurrentMockIndex(0);
     setMockScore(0);
     setMockAnswerRevealed(false);
@@ -256,7 +258,6 @@ export default function App() {
                       <p className="text-slate-200 text-base leading-relaxed">{mockQuestions[currentMockIndex]?.answer}</p>
                     </div>
 
-                    {/* Inject flows/tables dynamically inside interview view if relevant */}
                     {renderVisualEnhancements(mockQuestions[currentMockIndex]?.question)}
 
                     <div>
@@ -404,7 +405,6 @@ export default function App() {
                           <p className="text-slate-200 text-sm leading-relaxed">{item.answer}</p>
                         </div>
 
-                        {/* RENDER DYNAMIC FLOW DIAGRAMS AND COMPARISON TABLES HERE */}
                         {renderVisualEnhancements(item.question)}
 
                         <div className="bg-slate-900/40 rounded-xl p-4 border border-l-4 border-emerald-500/40 border-y-slate-700/30 border-r-slate-700/30">
